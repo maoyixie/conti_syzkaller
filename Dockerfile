@@ -1,16 +1,16 @@
 FROM gcr.io/syzkaller/env:latest
 
 # syzkaller
-RUN git clone --depth=1 https://github.com/google/syzkaller.git /syzkaller/gopath/src/github.com/google/syzkaller && \
+RUN git -c http.version=HTTP/1.1 clone --depth=1 https://github.com/google/syzkaller.git /syzkaller/gopath/src/github.com/google/syzkaller && \
     cd /syzkaller/gopath/src/github.com/google/syzkaller && \
     make -j"$(nproc)" && \
     mkdir workdir
 
 # kernel
-RUN git clone --branch v6.2 git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git && \
+RUN git -c http.version=HTTP/1.1 clone --branch v6.2 git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git && \
     cd linux && \
     make defconfig && \
-    make kvm_guest.config && \
+    make kvm_guest.config
 
 COPY .config /linux/.config
 
