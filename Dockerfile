@@ -27,6 +27,12 @@ RUN cd linux && \
 #     chmod +x create-image.sh && \
 #     ./create-image.sh
 
-RUN apt install -y qemu-system-x86
+# RUN apt install -y qemu-system-x86
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    dash wget ca-certificates qemu-system-x86 file coreutils \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 COPY my.cfg /my.cfg
